@@ -52,6 +52,7 @@
     categoryList: document.getElementById('categoryList'),
     catQuickPick: document.getElementById('catQuickPick'),
     filterGroup: document.getElementById('filterGroup'),
+    fabBtn: document.getElementById('fabBtn'),
     addBtn: document.getElementById('addBtn'),
 
     overlay: document.getElementById('modalOverlay'),
@@ -430,20 +431,33 @@
 
   var THEMES = ['neo-brutalism', 'papercut', 'facebook', 'dark-mode', 'terminal'];
 
-  function getTheme() {
+  function systemTheme() {
     try {
-      var t = localStorage.getItem(THEME_KEY);
-      return THEMES.indexOf(t) !== -1 ? t : 'neo-brutalism';
+      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        ? 'dark-mode'
+        : 'neo-brutalism';
     } catch (e) {
       return 'neo-brutalism';
     }
   }
 
-  function applyTheme(name) {
+  function getTheme() {
+    try {
+      var t = localStorage.getItem(THEME_KEY);
+      return THEMES.indexOf(t) !== -1 ? t : systemTheme();
+    } catch (e) {
+      return systemTheme();
+    }
+  }
+
+  // persist=false untuk tema automatik ikut sistem; pilihan user hanya disimpan bila dia pilih sendiri
+  function applyTheme(name, persist) {
     document.documentElement.setAttribute('data-theme', name);
     els.themeSelect.value = name;
     els.themeLabel.textContent = name.replace('-', ' ').toUpperCase();
-    try { localStorage.setItem(THEME_KEY, name); } catch (e) { /* biarkan sahaja */ }
+    if (persist) {
+      try { localStorage.setItem(THEME_KEY, name); } catch (e) { /* biarkan sahaja */ }
+    }
   }
 
   /* ---------- Tapisan kategori ---------- */
@@ -615,7 +629,16 @@
   });
 
   els.addBtn.addEventListener('click', function () { openModal(null); });
+  els.fabBtn.addEventListener('click', function () { openModal(null); });
   els.emptyAddBtn.addEventListener('click', function () { openModal(null); });
+
+  // ketuk luar modal (backdrop) untuk tutup — penting di telefon
+  els.overlay.addEventListener('click', function (e) {
+    if (e.target === els.overlay) closeModal();
+  });
+  els.confirmOverlay.addEventListener('click', function (e) {
+    if (e.target === els.confirmOverlay) closeConfirm();
+  });
 
   els.form.addEventListener('submit', submitForm);
   els.cancelBtn.addEventListener('click', closeModal);
@@ -657,8 +680,22 @@
   els.viewListBtn.addEventListener('click', function () { applyView('list'); });
 
   els.themeSelect.addEventListener('change', function () {
-    applyTheme(els.themeSelect.value);
+    applyTheme(els.themeSelect.value, true);
   });
+
+  // tema terus mengikut sistem selagi user belum pilih sendiri
+  if (window.matchMedia) {
+    var darkMql = window.matchMedia('(prefers-color-scheme: dark)');
+    var onSystemThemeChange = function () {
+      var stored = null;
+      try { stored = localStorage.getItem(THEME_KEY); } catch (e) { /* biarkan */ }
+      if (!stored || THEMES.indexOf(stored) === -1) {
+        applyTheme(systemTheme(), false);
+      }
+    };
+    if (darkMql.addEventListener) darkMql.addEventListener('change', onSystemThemeChange);
+    else if (darkMql.addListener) darkMql.addListener(onSystemThemeChange);
+  }
 
   els.catQuickPick.addEventListener('click', function (e) {
     var btn = e.target.closest('button[data-cat]');
@@ -689,7 +726,7 @@
   els.dateInput.value = todayISO();
   seedIfNeeded();
   applyView(getView());
-  applyTheme(getTheme());
+  applyTheme(getTheme(), false);
   activeFilter = getFilter();
   render();
 })();

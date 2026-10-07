@@ -83,6 +83,7 @@
   <!-- Modal Tambah / Edit -->
   <div id="modalOverlay" class="overlay" hidden>
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="sheet-handle" aria-hidden="true"></div>
       <div class="modal-head">
         <h2 id="modalTitle" class="modal-title">TAMBAH PROJECT</h2>
         <button id="modalClose" class="btn btn-icon" type="button" aria-label="Tutup">✕</button>
@@ -146,6 +147,7 @@
   <!-- Modal Sahkan Buang -->
   <div id="confirmOverlay" class="overlay" hidden>
     <div class="modal modal-small" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
+      <div class="sheet-handle" aria-hidden="true"></div>
       <h2 id="confirmTitle" class="modal-title">BUANG PROJECT?</h2>
       <p class="confirm-text">“<strong id="confirmName"></strong>” akan dipadam terus. Tindakan ini tak boleh diundur.</p>
       <div class="modal-actions">
@@ -154,6 +156,8 @@
       </div>
     </div>
   </div>
+
+  <button id="fabBtn" class="fab" type="button" aria-label="Tambah project" title="Tambah project">+</button>
 
   <div id="toast" class="toast" hidden role="status"></div>
 

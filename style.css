@@ -823,6 +823,37 @@ img { max-width: 100%; }
 
 .confirm-text { color: var(--muted); margin-bottom: 20px; overflow-wrap: anywhere; }
 
+/* Bar tarik bottom sheet (telefon sahaja) */
+.sheet-handle { display: none; }
+
+/* ---------- FAB (telefon sahaja) ---------- */
+
+.fab {
+  display: none;
+  position: fixed;
+  right: 16px;
+  bottom: calc(18px + env(safe-area-inset-bottom));
+  z-index: 40;
+  width: 56px;
+  height: 56px;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  line-height: 1;
+  color: var(--primary-ink);
+  background: var(--accent);
+  border: var(--border-w) solid var(--ink);
+  box-shadow: var(--shadow-md);
+  border-radius: max(var(--radius), 16px);
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+}
+
+.fab:hover { transform: translate(-2px, -2px); box-shadow: var(--shadow-lg); }
+
+.fab:active { transform: translate(2px, 2px); box-shadow: var(--shadow-sm); }
+
 /* ---------- Toast ---------- */
 
 .toast {
@@ -849,14 +880,65 @@ img { max-width: 100%; }
   to   { transform: translate(-50%, 0); opacity: 1; }
 }
 
+@keyframes sheet-up {
+  from { transform: translateY(100%); }
+  to   { transform: translateY(0); }
+}
+
 /* ---------- Responsive ---------- */
 
 @media (max-width: 640px) {
   .site-header { padding-block: 28px 22px; }
   .header-actions { width: 100%; }
-  .header-actions .btn-lg { flex: 1; }
+  /* FAB ambil alih; theme select + badge sentiasa sebaris */
+  .header-actions .btn-lg { display: none; }
+  .header-actions { gap: 10px; flex-wrap: nowrap; }
+  .header-actions .sort-wrap { flex: 0 1 auto; min-width: 0; }
+  .header-actions .sort-wrap .select { width: 100%; min-width: 0; }
+  .header-actions .stat-badge { flex: 0 0 auto; }
+
+  /* Bottom sheet: modal meluncur dari bawah */
+  .overlay { align-items: flex-end; padding: 0; }
+  .modal {
+    width: 100%;
+    max-width: 100%;
+    max-height: 90vh;
+    border-bottom: 0;
+    border-radius: max(var(--radius), 14px) max(var(--radius), 14px) 0 0;
+    animation: sheet-up 0.22s ease-out;
+  }
+  .sheet-handle {
+    display: block;
+    width: 44px;
+    height: 5px;
+    border-radius: 999px;
+    background: var(--muted);
+    margin: 0 auto 14px;
+  }
   .modal-actions { flex-direction: column-reverse; }
   .modal-actions .btn { width: 100%; }
+
+  /* Toolbar padat: carian / tapisan scroll / susun+paparan */
+  .toolbar { gap: 10px; }
+  .toolbar .search { order: 1; flex-basis: 100%; }
+  .toolbar .filter-group {
+    order: 2;
+    flex-basis: 100%;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .toolbar .filter-group::-webkit-scrollbar { display: none; }
+  .toolbar .filter-btn { flex: 0 0 auto; }
+  .toolbar .sort-wrap { order: 3; }
+  .toolbar .sort-label { display: none; }
+  .toolbar .view-toggle { order: 4; }
+
+  /* Toast naik supaya tidak dilindungi FAB */
+  .toast { bottom: calc(88px + env(safe-area-inset-bottom)); }
+
+  .fab { display: flex; }
 }
 
 /* Sasaran sentuh selesa pada telefon kecil */
