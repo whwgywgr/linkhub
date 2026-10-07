@@ -10,24 +10,25 @@
   var SEED_FLAG_KEY = 'linkhub.seeds.v1';
   var VIEW_KEY = 'linkhub.view.v1';
   var THEME_KEY = 'linkhub.theme.v1';
+  var CATEGORY_KEY = 'linkhub.filter.v1';
 
   // Seed data: semua project web dengan link yang hidup.
   // Dimuatkan sekali sahaja pada first visit — selepas itu data pengguna
   // yang menjadi sumber kebenaran (flag SEED_FLAG_KEY menghalang muat semula).
   var SEED_PROJECTS = [
-    { name: 'Kalkulator Tarikh', url: 'https://whwgywgr.github.io/kalkulator-tarikh/', date: '2025-03-08' },
-    { name: 'Super Note V2', url: 'https://super-note-v2.vercel.app', date: '2025-04-12' },
-    { name: 'Portfolio', url: 'https://whwgywgr.github.io/portfolio/', date: '2025-04-15' },
-    { name: 'CMS Blog Post', url: 'https://cms-blog-post-weld.vercel.app', date: '2025-05-19' },
-    { name: 'SevCar', url: 'https://sevcar.vercel.app', date: '2025-05-27' },
-    { name: 'SevCar 2', url: 'https://sevcar2.vercel.app', date: '2025-05-29' },
-    { name: 'PaymentRecord', url: 'https://whwgywgr.github.io/paymentrecord/', date: '2025-06-01' },
-    { name: 'PostX', url: 'https://postx-omega.vercel.app', date: '2025-06-02' },
-    { name: 'Card Management System', url: 'https://cardmanagementsystem.vercel.app', date: '2025-12-17' },
-    { name: 'QuickReplyManager', url: 'https://quickreplymanager.vercel.app', date: '2026-09-16' },
-    { name: 'PromptbyMe', url: 'https://whwgywgr.github.io/PromptbyMe/', date: '2026-09-27' },
-    { name: 'Timeline26', url: 'https://whwgywgr.github.io/timeline26/', date: '2026-09-30' },
-    { name: 'LinkHub', url: 'https://linkhub-roan-six.vercel.app', date: '2026-10-07' }
+    { name: 'Kalkulator Tarikh', url: 'https://whwgywgr.github.io/kalkulator-tarikh/', date: '2025-03-08', category: 'project' },
+    { name: 'Super Note V2', url: 'https://super-note-v2.vercel.app', date: '2025-04-12', category: 'project' },
+    { name: 'Portfolio', url: 'https://whwgywgr.github.io/portfolio/', date: '2025-04-15', category: 'project' },
+    { name: 'CMS Blog Post', url: 'https://cms-blog-post-weld.vercel.app', date: '2025-05-19', category: 'project' },
+    { name: 'SevCar', url: 'https://sevcar.vercel.app', date: '2025-05-27', category: 'project' },
+    { name: 'SevCar 2', url: 'https://sevcar2.vercel.app', date: '2025-05-29', category: 'project' },
+    { name: 'PaymentRecord', url: 'https://whwgywgr.github.io/paymentrecord/', date: '2025-06-01', category: 'project' },
+    { name: 'PostX', url: 'https://postx-omega.vercel.app', date: '2025-06-02', category: 'project' },
+    { name: 'Card Management System', url: 'https://cardmanagementsystem.vercel.app', date: '2025-12-17', category: 'project' },
+    { name: 'QuickReplyManager', url: 'https://quickreplymanager.vercel.app', date: '2026-09-16', category: 'project' },
+    { name: 'PromptbyMe', url: 'https://whwgywgr.github.io/PromptbyMe/', date: '2026-09-27', category: 'project' },
+    { name: 'Timeline26', url: 'https://whwgywgr.github.io/timeline26/', date: '2026-09-30', category: 'project' },
+    { name: 'LinkHub', url: 'https://linkhub-roan-six.vercel.app', date: '2026-10-07', category: 'project' }
   ];
 
   var TONES = ['1', '2', '3', '4', '5'];
@@ -46,6 +47,10 @@
     viewListBtn: document.getElementById('viewListBtn'),
     themeSelect: document.getElementById('themeSelect'),
     themeLabel: document.getElementById('themeLabel'),
+    catInput: document.getElementById('catInput'),
+    filterAll: document.getElementById('filterAll'),
+    filterProject: document.getElementById('filterProject'),
+    filterLink: document.getElementById('filterLink'),
     addBtn: document.getElementById('addBtn'),
 
     overlay: document.getElementById('modalOverlay'),
@@ -78,6 +83,7 @@
   var editingId = null;
   var currentImage = '';
   var deleteTargetId = null;
+  var activeFilter = 'all';
   var toastTimer = null;
 
   /* ---------- Utiliti ---------- */
@@ -135,7 +141,20 @@
     try {
       var raw = localStorage.getItem(STORAGE_KEY);
       var data = raw ? JSON.parse(raw) : [];
-      return Array.isArray(data) ? data : [];
+      if (!Array.isArray(data)) return [];
+
+      // migrasi: item lama tanpa kategori dianggap project
+      var changed = false;
+      data.forEach(function (p) {
+        if (p && p.category !== 'link' && p.category !== 'project') {
+          p.category = 'project';
+          changed = true;
+        }
+      });
+      if (changed) {
+        try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e2) { /* biarkan */ }
+      }
+      return data;
     } catch (e) {
       return [];
     }
@@ -225,6 +244,7 @@
   function visibleProjects() {
     var q = els.search.value.trim().toLowerCase();
     var list = projects.filter(function (p) {
+      if (activeFilter !== 'all' && p.category !== activeFilter) return false;
       if (!q) return true;
       return (p.name + ' ' + p.url).toLowerCase().indexOf(q) !== -1;
     });
@@ -252,12 +272,19 @@
       '</div>';
   }
 
+  function categoryLabel(cat) {
+    return cat === 'link' ? 'Link' : 'Project';
+  }
+
   function cardHtml(p, tone) {
     return '<article class="card" tabindex="0" data-id="' + escapeHtml(p.id) + '" ' +
       'aria-label="' + escapeHtml(p.name) + '">' +
       mediaHtml(p, tone) +
       '<div class="card-body">' +
+      '<div class="card-tags">' +
       '<span class="chip" data-tone="' + tone + '">' + escapeHtml(formatDate(p.date)) + '</span>' +
+      '<span class="chip chip-cat" data-cat="' + escapeHtml(p.category) + '">' + escapeHtml(categoryLabel(p.category)) + '</span>' +
+      '</div>' +
       '<h3 class="card-name">' + escapeHtml(p.name) + '</h3>' +
       '<p class="card-url" title="' + escapeHtml(p.url) + '">' + escapeHtml(shortUrl(p.url)) + '</p>' +
       '<div class="card-actions">' +
@@ -280,17 +307,28 @@
 
     els.count.textContent = projects.length;
 
+    // kiraan kategori pada butang tapisan
+    var linkTotal = 0;
+    projects.forEach(function (p) { if (p.category === 'link') linkTotal++; });
+    els.filterAll.textContent = 'Semua (' + projects.length + ')';
+    els.filterProject.textContent = 'Project (' + (projects.length - linkTotal) + ')';
+    els.filterLink.textContent = 'Link (' + linkTotal + ')';
+
     var hasProjects = projects.length > 0;
     var hasResults = list.length > 0;
+    var q = els.search.value.trim();
     els.empty.hidden = hasResults;
     els.emptyAddBtn.hidden = hasProjects;
     if (!hasResults) {
-      if (hasProjects) {
-        els.emptyTitle.textContent = 'TIADA PADANAN';
-        els.emptyText.textContent = 'Tak jumpa untuk “' + els.search.value.trim() + '”. Cuba kata kunci lain.';
-      } else {
+      if (!hasProjects) {
         els.emptyTitle.textContent = 'TIADA PROJECT LAGI';
         els.emptyText.textContent = 'Tambah project pertama anda — masukkan nama, link & gambar.';
+      } else if (q) {
+        els.emptyTitle.textContent = 'TIADA PADANAN';
+        els.emptyText.textContent = 'Tak jumpa untuk “' + q + '”. Cuba kata kunci lain.';
+      } else {
+        els.emptyTitle.textContent = 'KATEGORI KOSONG';
+        els.emptyText.textContent = 'Tiada item dalam kategori ini — tukar tapisan di atas.';
       }
     }
 
@@ -356,6 +394,25 @@
     try { localStorage.setItem(THEME_KEY, name); } catch (e) { /* biarkan sahaja */ }
   }
 
+  /* ---------- Tapisan kategori ---------- */
+
+  function getFilter() {
+    try {
+      var f = localStorage.getItem(CATEGORY_KEY);
+      return (f === 'project' || f === 'link') ? f : 'all';
+    } catch (e) {
+      return 'all';
+    }
+  }
+
+  function applyFilter(filter) {
+    activeFilter = filter;
+    els.filterAll.classList.toggle('active', filter === 'all');
+    els.filterProject.classList.toggle('active', filter === 'project');
+    els.filterLink.classList.toggle('active', filter === 'link');
+    try { localStorage.setItem(CATEGORY_KEY, filter); } catch (e) { /* biarkan sahaja */ }
+  }
+
   /* ---------- Modal tambah / edit ---------- */
 
   function openModal(p) {
@@ -365,6 +422,7 @@
     els.projectId.value = editingId || '';
     els.nameInput.value = p ? p.name : '';
     els.urlInput.value = p ? p.url : '';
+    els.catInput.value = p && p.category === 'link' ? 'link' : 'project';
     els.dateInput.value = p && p.date ? p.date : todayISO();
 
     currentImage = p && p.image ? p.image : '';
@@ -395,13 +453,14 @@
 
     var name = els.nameInput.value.trim();
     var url = normalizeUrl(els.urlInput.value);
+    var category = els.catInput.value === 'link' ? 'link' : 'project';
     var date = els.dateInput.value;
 
     if (!name) { showFormError('Nama project wajib diisi.'); els.nameInput.focus(); return; }
     if (!url) { showFormError('Link tak sah. Contoh: https://example.com'); els.urlInput.focus(); return; }
     if (!date) { showFormError('Tarikh dibuat wajib diisi.'); els.dateInput.focus(); return; }
 
-    var project = { id: editingId || uid(), name: name, url: url, image: currentImage, date: date };
+    var project = { id: editingId || uid(), name: name, url: url, category: category, image: currentImage, date: date };
 
     if (editingId) {
       for (var i = 0; i < projects.length; i++) {
@@ -530,6 +589,10 @@
     applyTheme(els.themeSelect.value);
   });
 
+  els.filterAll.addEventListener('click', function () { applyFilter('all'); render(); });
+  els.filterProject.addEventListener('click', function () { applyFilter('project'); render(); });
+  els.filterLink.addEventListener('click', function () { applyFilter('link'); render(); });
+
   els.confirmYes.addEventListener('click', confirmDelete);
   els.confirmNo.addEventListener('click', closeConfirm);
 
@@ -546,5 +609,6 @@
   seedIfNeeded();
   applyView(getView());
   applyTheme(getTheme());
+  applyFilter(getFilter());
   render();
 })();

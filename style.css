@@ -369,13 +369,15 @@ img { max-width: 100%; }
 
 /* ---------- Suis paparan (grid / senarai) ---------- */
 
-.view-toggle {
+.view-toggle,
+.filter-group {
   display: inline-flex;
   border-radius: var(--radius);
   overflow: hidden;
 }
 
-.view-btn {
+.view-btn,
+.filter-btn {
   font-family: var(--font-body);
   font-size: 0.78rem;
   font-weight: 700;
@@ -389,13 +391,17 @@ img { max-width: 100%; }
   white-space: nowrap;
 }
 
-.view-btn + .view-btn { border-left: 0; }
+.view-btn + .view-btn,
+.filter-btn + .filter-btn { border-left: 0; }
 
-.view-btn:hover { background: var(--bg); }
+.view-btn:hover,
+.filter-btn:hover { background: var(--bg); }
 
-.view-btn.active { background: var(--accent); color: var(--primary-ink); }
+.view-btn.active,
+.filter-btn.active { background: var(--accent); color: var(--primary-ink); }
 
-.view-btn:focus-visible { outline: 3px solid var(--accent-3); outline-offset: 2px; z-index: 1; }
+.view-btn:focus-visible,
+.filter-btn:focus-visible { outline: 3px solid var(--accent-3); outline-offset: 2px; z-index: 1; }
 
 /* ---------- Mod senarai (kad sama, susun sebagai baris) ---------- */
 
@@ -574,6 +580,16 @@ img { max-width: 100%; }
 .chip[data-tone="3"] { background: var(--accent-3); }
 .chip[data-tone="4"] { background: var(--accent-4); }
 .chip[data-tone="5"] { background: var(--accent-5); }
+
+.card-tags {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.chip-cat[data-cat="project"] { background: var(--accent); }
+.chip-cat[data-cat="link"] { background: var(--accent-3); }
 
 .card-name {
   font-family: var(--font-display);
