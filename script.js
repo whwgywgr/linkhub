@@ -338,7 +338,7 @@
 
   /* ---------- Theme ---------- */
 
-  var THEMES = ['neo-brutalism', 'papercut', 'facebook'];
+  var THEMES = ['neo-brutalism', 'papercut', 'facebook', 'dark-mode'];
 
   function getTheme() {
     try {

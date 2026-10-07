@@ -101,6 +101,39 @@
   --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
+/* DARK MODE — latar midnight, kad gelap berangkat, aksen biru elektrik
+   (palet ala GitHub Dark). Tekniky dan selesa di mata waktu malam. */
+
+[data-theme="dark-mode"] {
+  --bg: #0F1117;
+  --grid-line: rgba(255, 255, 255, 0.045);
+  --ink: #E6E9EF;
+  --surface: #1A1D26;
+  --muted: #9AA0A6;
+  --accent: #58A6FF;      /* biru elektrik */
+  --accent-2: #E5534B;    /* merah */
+  --accent-3: #3FB950;    /* hijau */
+  --accent-4: #8957E5;    /* ungu */
+  --accent-5: #D29922;    /* amber */
+  --danger-ink: #FFFFFF;
+
+  --border-w: 1px;
+  --shadow-sm: 0 2px 6px rgba(0, 0, 0, 0.5);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+  --shadow-accent: 0 4px 12px rgba(88, 166, 255, 0.3);
+  --letter-shadow: none;
+  --focus-shadow: 0 0 0 3px rgba(88, 166, 255, 0.5);
+  --card-tilt: 0deg;
+  --radius: 10px;
+  --primary-ink: #FFFFFF;
+  --chip-border-w: 0px;
+  --marquee-bg: #0A0C10;
+  --marquee-ink: #58A6FF;
+
+  --font-display: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
 /* ---------- Reset & asas ---------- */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
