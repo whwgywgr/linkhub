@@ -102,9 +102,10 @@
 
         <div class="field">
           <label class="label" for="catInput">Kategori</label>
-          <input id="catInput" class="input" type="text" list="categoryList" maxlength="30" placeholder="cth: Project, Link, Kerja..." autocomplete="off">
+          <input id="catInput" class="input" type="text" list="categoryList" maxlength="30" placeholder="Taip kategori baru — cth: Kerja, Belajar, Tools..." autocomplete="off">
           <datalist id="categoryList"></datalist>
-          <p class="field-hint">Taip nama kategori sendiri atau pilih yang sedia ada.</p>
+          <div id="catQuickPick" class="quick-pick"></div>
+          <p class="field-hint">Taip nama kategori sendiri (kosong = Project), atau klik cadangan di bawah. Kategori baru akan jadi butang tapisan selepas disimpan.</p>
         </div>
 
         <div class="field">

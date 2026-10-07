@@ -598,6 +598,34 @@ img { max-width: 100%; }
   margin-top: 6px;
 }
 
+.quick-pick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.quick-pick button {
+  font-family: var(--font-body);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  background: var(--surface);
+  border: var(--chip-border-w) solid var(--ink);
+  padding: 4px 10px;
+  cursor: pointer;
+  border-radius: var(--radius);
+  transition: transform 0.1s ease, background 0.1s ease, color 0.1s ease;
+}
+
+.quick-pick button:hover {
+  background: var(--accent);
+  color: var(--primary-ink);
+  transform: translate(-1px, -1px);
+}
+
 .card-name {
   font-family: var(--font-display);
   font-size: 1.1rem;
