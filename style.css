@@ -219,6 +219,43 @@
   --font-display: Georgia, "Times New Roman", serif;
 }
 
+/* FLAT 2.0 — flat design dengan kedalaman halus: palet Flat UI Colors,
+   bayang lembut, tiada border, sudut bulat dan font Montserrat. */
+
+[data-theme="flat-2"] {
+  --bg: #ECF0F1;
+  --grid-line: rgba(44, 62, 80, 0.045);
+  --ink: #2C3E50;
+  --surface: #FFFFFF;
+  --muted: #95A5A6;
+  --accent: #3498DB;      /* peter river */
+  --accent-2: #E74C3C;    /* alizarin */
+  --accent-3: #1ABC9C;    /* turquoise */
+  --accent-4: #9B59B6;    /* amethyst */
+  --accent-5: #E67E22;    /* carrot */
+  --danger-ink: #FFFFFF;
+
+  --border-w: 0px;
+  --shadow-sm: 0 1px 3px rgba(44, 62, 80, 0.12);
+  --shadow-md: 0 3px 8px rgba(44, 62, 80, 0.14);
+  --shadow-lg: 0 10px 24px rgba(44, 62, 80, 0.18);
+  --shadow-accent: 0 4px 10px rgba(52, 152, 219, 0.35);
+  --letter-shadow: none;
+  --focus-shadow: 0 0 0 3px rgba(52, 152, 219, 0.35);
+  --card-tilt: 0deg;
+  --radius: 8px;
+  --primary-ink: #FFFFFF;
+  --chip-border-w: 0px;
+  --marquee-bg: #2C3E50;
+  --marquee-ink: #1ABC9C;
+  --invert-bg: #2C3E50;
+  --invert-ink: #3498DB;
+  --selection-ink: #ECF0F1;
+
+  --font-display: "Montserrat", "Segoe UI", sans-serif;
+  --font-body: "Montserrat", "Segoe UI", sans-serif;
+}
+
 /* ---------- Reset & asas ---------- */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
