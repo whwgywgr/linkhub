@@ -46,11 +46,7 @@
   <main class="container">
     <div class="toolbar">
       <input id="searchInput" class="input search" type="search" placeholder="🔎 Cari project..." autocomplete="off">
-      <div class="filter-group" role="group" aria-label="Tapis kategori">
-        <button id="filterAll" class="filter-btn active" data-filter="all" type="button">Semua</button>
-        <button id="filterProject" class="filter-btn" data-filter="project" type="button">Project</button>
-        <button id="filterLink" class="filter-btn" data-filter="link" type="button">Link</button>
-      </div>
+      <div id="filterGroup" class="filter-group" role="group" aria-label="Tapis kategori"></div>
       <label class="sort-wrap">
         <span class="sort-label">Susun:</span>
         <select id="sortSelect" class="input select">
@@ -106,10 +102,9 @@
 
         <div class="field">
           <label class="label" for="catInput">Kategori</label>
-          <select id="catInput" class="input">
-            <option value="project">Project — projek sendiri</option>
-            <option value="link">Link — pautan disimpan</option>
-          </select>
+          <input id="catInput" class="input" type="text" list="categoryList" maxlength="30" placeholder="cth: Project, Link, Kerja..." autocomplete="off">
+          <datalist id="categoryList"></datalist>
+          <p class="field-hint">Taip nama kategori sendiri atau pilih yang sedia ada.</p>
         </div>
 
         <div class="field">

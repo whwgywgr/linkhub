@@ -16,19 +16,19 @@
   // Dimuatkan sekali sahaja pada first visit — selepas itu data pengguna
   // yang menjadi sumber kebenaran (flag SEED_FLAG_KEY menghalang muat semula).
   var SEED_PROJECTS = [
-    { name: 'Kalkulator Tarikh', url: 'https://whwgywgr.github.io/kalkulator-tarikh/', date: '2025-03-08', category: 'project' },
-    { name: 'Super Note V2', url: 'https://super-note-v2.vercel.app', date: '2025-04-12', category: 'project' },
-    { name: 'Portfolio', url: 'https://whwgywgr.github.io/portfolio/', date: '2025-04-15', category: 'project' },
-    { name: 'CMS Blog Post', url: 'https://cms-blog-post-weld.vercel.app', date: '2025-05-19', category: 'project' },
-    { name: 'SevCar', url: 'https://sevcar.vercel.app', date: '2025-05-27', category: 'project' },
-    { name: 'SevCar 2', url: 'https://sevcar2.vercel.app', date: '2025-05-29', category: 'project' },
-    { name: 'PaymentRecord', url: 'https://whwgywgr.github.io/paymentrecord/', date: '2025-06-01', category: 'project' },
-    { name: 'PostX', url: 'https://postx-omega.vercel.app', date: '2025-06-02', category: 'project' },
-    { name: 'Card Management System', url: 'https://cardmanagementsystem.vercel.app', date: '2025-12-17', category: 'project' },
-    { name: 'QuickReplyManager', url: 'https://quickreplymanager.vercel.app', date: '2026-09-16', category: 'project' },
-    { name: 'PromptbyMe', url: 'https://whwgywgr.github.io/PromptbyMe/', date: '2026-09-27', category: 'project' },
-    { name: 'Timeline26', url: 'https://whwgywgr.github.io/timeline26/', date: '2026-09-30', category: 'project' },
-    { name: 'LinkHub', url: 'https://linkhub-roan-six.vercel.app', date: '2026-10-07', category: 'project' }
+    { name: 'Kalkulator Tarikh', url: 'https://whwgywgr.github.io/kalkulator-tarikh/', date: '2025-03-08', category: 'Project' },
+    { name: 'Super Note V2', url: 'https://super-note-v2.vercel.app', date: '2025-04-12', category: 'Project' },
+    { name: 'Portfolio', url: 'https://whwgywgr.github.io/portfolio/', date: '2025-04-15', category: 'Project' },
+    { name: 'CMS Blog Post', url: 'https://cms-blog-post-weld.vercel.app', date: '2025-05-19', category: 'Project' },
+    { name: 'SevCar', url: 'https://sevcar.vercel.app', date: '2025-05-27', category: 'Project' },
+    { name: 'SevCar 2', url: 'https://sevcar2.vercel.app', date: '2025-05-29', category: 'Project' },
+    { name: 'PaymentRecord', url: 'https://whwgywgr.github.io/paymentrecord/', date: '2025-06-01', category: 'Project' },
+    { name: 'PostX', url: 'https://postx-omega.vercel.app', date: '2025-06-02', category: 'Project' },
+    { name: 'Card Management System', url: 'https://cardmanagementsystem.vercel.app', date: '2025-12-17', category: 'Project' },
+    { name: 'QuickReplyManager', url: 'https://quickreplymanager.vercel.app', date: '2026-09-16', category: 'Project' },
+    { name: 'PromptbyMe', url: 'https://whwgywgr.github.io/PromptbyMe/', date: '2026-09-27', category: 'Project' },
+    { name: 'Timeline26', url: 'https://whwgywgr.github.io/timeline26/', date: '2026-09-30', category: 'Project' },
+    { name: 'LinkHub', url: 'https://linkhub-roan-six.vercel.app', date: '2026-10-07', category: 'Project' }
   ];
 
   var TONES = ['1', '2', '3', '4', '5'];
@@ -48,9 +48,8 @@
     themeSelect: document.getElementById('themeSelect'),
     themeLabel: document.getElementById('themeLabel'),
     catInput: document.getElementById('catInput'),
-    filterAll: document.getElementById('filterAll'),
-    filterProject: document.getElementById('filterProject'),
-    filterLink: document.getElementById('filterLink'),
+    categoryList: document.getElementById('categoryList'),
+    filterGroup: document.getElementById('filterGroup'),
     addBtn: document.getElementById('addBtn'),
 
     overlay: document.getElementById('modalOverlay'),
@@ -143,13 +142,15 @@
       var data = raw ? JSON.parse(raw) : [];
       if (!Array.isArray(data)) return [];
 
-      // migrasi: item lama tanpa kategori dianggap project
+      // migrasi: normalisasikan kategori (item lama tanpa kategori = Project)
       var changed = false;
       data.forEach(function (p) {
-        if (p && p.category !== 'link' && p.category !== 'project') {
-          p.category = 'project';
-          changed = true;
-        }
+        if (!p) return;
+        var c = typeof p.category === 'string' ? p.category.trim().slice(0, 30) : '';
+        if (!c) c = 'Project';
+        else if (c.toLowerCase() === 'project') c = 'Project';
+        else if (c.toLowerCase() === 'link') c = 'Link';
+        if (p.category !== c) { p.category = c; changed = true; }
       });
       if (changed) {
         try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch (e2) { /* biarkan */ }
@@ -244,7 +245,7 @@
   function visibleProjects() {
     var q = els.search.value.trim().toLowerCase();
     var list = projects.filter(function (p) {
-      if (activeFilter !== 'all' && p.category !== activeFilter) return false;
+      if (activeFilter !== 'all' && (p.category || 'Project').toLowerCase() !== activeFilter) return false;
       if (!q) return true;
       return (p.name + ' ' + p.url).toLowerCase().indexOf(q) !== -1;
     });
@@ -272,8 +273,26 @@
       '</div>';
   }
 
-  function categoryLabel(cat) {
-    return cat === 'link' ? 'Link' : 'Project';
+  function hashKey(s) {
+    var h = 0;
+    for (var i = 0; i < s.length; i++) {
+      h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    }
+    return h;
+  }
+
+  // chip kategori: Project/Link warna tetap, kategori custom warna ikut hash
+  function catChipHtml(p) {
+    var cat = p.category || 'Project';
+    var key = cat.toLowerCase();
+    if (key === 'project') {
+      return '<span class="chip chip-cat" data-cat="project">Project</span>';
+    }
+    if (key === 'link') {
+      return '<span class="chip chip-cat" data-cat="link">Link</span>';
+    }
+    var tone = TONES[hashKey(key) % 4 + 1];
+    return '<span class="chip chip-cat" data-tone="' + tone + '">' + escapeHtml(cat) + '</span>';
   }
 
   function cardHtml(p, tone) {
@@ -283,7 +302,7 @@
       '<div class="card-body">' +
       '<div class="card-tags">' +
       '<span class="chip" data-tone="' + tone + '">' + escapeHtml(formatDate(p.date)) + '</span>' +
-      '<span class="chip chip-cat" data-cat="' + escapeHtml(p.category) + '">' + escapeHtml(categoryLabel(p.category)) + '</span>' +
+      catChipHtml(p) +
       '</div>' +
       '<h3 class="card-name">' + escapeHtml(p.name) + '</h3>' +
       '<p class="card-url" title="' + escapeHtml(p.url) + '">' + escapeHtml(shortUrl(p.url)) + '</p>' +
@@ -298,6 +317,17 @@
   }
 
   function render() {
+    // jika kategori aktif tiada lagi (item terakhir dibuang), kembali ke Semua
+    if (activeFilter !== 'all') {
+      var exists = projects.some(function (p) {
+        return (p.category || 'Project').toLowerCase() === activeFilter;
+      });
+      if (!exists) {
+        activeFilter = 'all';
+        try { localStorage.setItem(CATEGORY_KEY, 'all'); } catch (e0) { /* biarkan */ }
+      }
+    }
+
     var list = visibleProjects();
     var html = '';
     for (var i = 0; i < list.length; i++) {
@@ -305,14 +335,9 @@
     }
     els.grid.innerHTML = html;
 
-    els.count.textContent = projects.length;
+    renderFilterBar();
 
-    // kiraan kategori pada butang tapisan
-    var linkTotal = 0;
-    projects.forEach(function (p) { if (p.category === 'link') linkTotal++; });
-    els.filterAll.textContent = 'Semua (' + projects.length + ')';
-    els.filterProject.textContent = 'Project (' + (projects.length - linkTotal) + ')';
-    els.filterLink.textContent = 'Link (' + linkTotal + ')';
+    els.count.textContent = projects.length;
 
     var hasProjects = projects.length > 0;
     var hasResults = list.length > 0;
@@ -333,6 +358,30 @@
     }
 
     attachImageFallbacks();
+  }
+
+  // bina bar tapisan secara dinamik ikut kategori yang wujud
+  function renderFilterBar() {
+    var counts = {};
+    var order = [];
+    projects.forEach(function (p) {
+      var cat = p.category || 'Project';
+      var key = cat.toLowerCase();
+      if (!counts[key]) {
+        counts[key] = { label: cat, count: 0 };
+        order.push(key);
+      }
+      counts[key].count++;
+    });
+
+    var html = '<button class="filter-btn' + (activeFilter === 'all' ? ' active' : '') +
+      '" data-filter="all" type="button">Semua (' + projects.length + ')</button>';
+    order.forEach(function (key) {
+      html += '<button class="filter-btn' + (activeFilter === key ? ' active' : '') +
+        '" data-filter="' + escapeHtml(key) + '" type="button">' +
+        escapeHtml(counts[key].label) + ' (' + counts[key].count + ')</button>';
+    });
+    els.filterGroup.innerHTML = html;
   }
 
   function attachImageFallbacks() {
@@ -399,18 +448,15 @@
   function getFilter() {
     try {
       var f = localStorage.getItem(CATEGORY_KEY);
-      return (f === 'project' || f === 'link') ? f : 'all';
+      return f && f !== 'all' ? f.toLowerCase() : 'all';
     } catch (e) {
       return 'all';
     }
   }
 
   function applyFilter(filter) {
-    activeFilter = filter;
-    els.filterAll.classList.toggle('active', filter === 'all');
-    els.filterProject.classList.toggle('active', filter === 'project');
-    els.filterLink.classList.toggle('active', filter === 'link');
-    try { localStorage.setItem(CATEGORY_KEY, filter); } catch (e) { /* biarkan sahaja */ }
+    activeFilter = filter === 'all' ? 'all' : String(filter).toLowerCase();
+    try { localStorage.setItem(CATEGORY_KEY, activeFilter); } catch (e) { /* biarkan sahaja */ }
   }
 
   /* ---------- Modal tambah / edit ---------- */
@@ -422,8 +468,21 @@
     els.projectId.value = editingId || '';
     els.nameInput.value = p ? p.name : '';
     els.urlInput.value = p ? p.url : '';
-    els.catInput.value = p && p.category === 'link' ? 'link' : 'project';
+    els.catInput.value = p && p.category ? p.category : 'Project';
     els.dateInput.value = p && p.date ? p.date : todayISO();
+
+    // cadangan kategori: yang sedia ada dalam senarai
+    var seenCats = {};
+    var catOptions = '';
+    projects.forEach(function (x) {
+      var c = x.category || 'Project';
+      var k = c.toLowerCase();
+      if (!seenCats[k]) {
+        seenCats[k] = true;
+        catOptions += '<option value="' + escapeHtml(c) + '"></option>';
+      }
+    });
+    els.categoryList.innerHTML = catOptions;
 
     currentImage = p && p.image ? p.image : '';
     els.imgUrlInput.value = currentImage && currentImage.indexOf('data:') !== 0 ? currentImage : '';
@@ -453,7 +512,10 @@
 
     var name = els.nameInput.value.trim();
     var url = normalizeUrl(els.urlInput.value);
-    var category = els.catInput.value === 'link' ? 'link' : 'project';
+    var category = (els.catInput.value || '').trim().slice(0, 30);
+    if (!category) category = 'Project';
+    else if (category.toLowerCase() === 'project') category = 'Project';
+    else if (category.toLowerCase() === 'link') category = 'Link';
     var date = els.dateInput.value;
 
     if (!name) { showFormError('Nama project wajib diisi.'); els.nameInput.focus(); return; }
@@ -589,9 +651,12 @@
     applyTheme(els.themeSelect.value);
   });
 
-  els.filterAll.addEventListener('click', function () { applyFilter('all'); render(); });
-  els.filterProject.addEventListener('click', function () { applyFilter('project'); render(); });
-  els.filterLink.addEventListener('click', function () { applyFilter('link'); render(); });
+  els.filterGroup.addEventListener('click', function (e) {
+    var btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    applyFilter(btn.getAttribute('data-filter'));
+    render();
+  });
 
   els.confirmYes.addEventListener('click', confirmDelete);
   els.confirmNo.addEventListener('click', closeConfirm);
@@ -609,6 +674,6 @@
   seedIfNeeded();
   applyView(getView());
   applyTheme(getTheme());
-  applyFilter(getFilter());
+  activeFilter = getFilter();
   render();
 })();
