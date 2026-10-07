@@ -304,19 +304,9 @@ img { max-width: 100%; }
 
 .card:hover .card-img { transform: scale(1.045); }
 
-.card-favicon {
-  width: 86px;
-  height: 86px;
-  object-fit: contain;
-  background: var(--surface);
-  border: var(--border-w) solid var(--ink);
-  box-shadow: var(--shadow-sm);
-  padding: 12px;
-}
-
 .card-letter {
   font-family: var(--font-display);
-  font-size: 3.4rem;
+  font-size: 4rem;
   color: var(--ink);
   text-shadow: 4px 4px 0 var(--surface);
 }

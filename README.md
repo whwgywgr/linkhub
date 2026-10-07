@@ -7,11 +7,12 @@ Website mudah untuk simpan link-link web project anda di satu tempat — klik je
 ## Ciri-ciri
 
 - ➕ **Tambah project** — nama, link, gambar & tarikh dibuat
-- 🖼️ **Gambar** — masukkan URL gambar atau upload fail (auto-resize & mampat)
+- 🖼️ **Gambar** — masukkan URL gambar atau upload fail (auto-resize & mampat); kalau takda gambar, kad papar huruf pertama nama project atas latar warna
 - ⚡ **Satu klik terus buka** — klik mana-mana bahagian kad
 - ✏️ **Edit & buang** project
 - 🔎 **Carian** + susunan (terbaru / terlama / nama A–Z)
 - 💾 Data disimpan dalam **localStorage** browser (tiada server diperlukan)
+- 🌱 **Seed data** — senarai project sedia ada dimuatkan sekali sahaja pada kunjungan pertama; selepas itu data anda sendiri yang digunakan
 - 🎨 Theme **Neo-Brutalism** — struktur CSS variables, senang tambah theme baru kelak
 
 ## Jalankan secara tempatan

@@ -7,6 +7,27 @@
   'use strict';
 
   var STORAGE_KEY = 'linkhub.projects.v1';
+  var SEED_FLAG_KEY = 'linkhub.seeds.v1';
+
+  // Seed data: semua project web dengan link yang hidup.
+  // Dimuatkan sekali sahaja pada first visit — selepas itu data pengguna
+  // yang menjadi sumber kebenaran (flag SEED_FLAG_KEY menghalang muat semula).
+  var SEED_PROJECTS = [
+    { name: 'Kalkulator Tarikh', url: 'https://whwgywgr.github.io/kalkulator-tarikh/', date: '2025-03-08' },
+    { name: 'Super Note V2', url: 'https://super-note-v2.vercel.app', date: '2025-04-12' },
+    { name: 'Portfolio', url: 'https://whwgywgr.github.io/portfolio/', date: '2025-04-15' },
+    { name: 'CMS Blog Post', url: 'https://cms-blog-post-weld.vercel.app', date: '2025-05-19' },
+    { name: 'SevCar', url: 'https://sevcar.vercel.app', date: '2025-05-27' },
+    { name: 'SevCar 2', url: 'https://sevcar2.vercel.app', date: '2025-05-29' },
+    { name: 'PaymentRecord', url: 'https://whwgywgr.github.io/paymentrecord/', date: '2025-06-01' },
+    { name: 'PostX', url: 'https://postx-omega.vercel.app', date: '2025-06-02' },
+    { name: 'Card Management System', url: 'https://cardmanagementsystem.vercel.app', date: '2025-12-17' },
+    { name: 'QuickReplyManager', url: 'https://quickreplymanager.vercel.app', date: '2026-09-16' },
+    { name: 'PromptbyMe', url: 'https://whwgywgr.github.io/PromptbyMe/', date: '2026-09-27' },
+    { name: 'Timeline26', url: 'https://whwgywgr.github.io/timeline26/', date: '2026-09-30' },
+    { name: 'LinkHub', url: 'https://linkhub-roan-six.vercel.app', date: '2026-10-07' }
+  ];
+
   var TONES = ['1', '2', '3', '4', '5'];
   var MONTHS_MS = ['Jan', 'Feb', 'Mac', 'Apr', 'Mei', 'Jun', 'Jul', 'Ogo', 'Sep', 'Okt', 'Nov', 'Dis'];
 
@@ -90,17 +111,9 @@
     try { return new URL(v).href; } catch (e) { return ''; }
   }
 
-  function hostOf(url) {
-    try { return new URL(url).hostname; } catch (e) { return ''; }
-  }
-
   function shortUrl(url) {
     var s = url.replace(/^https?:\/\//i, '').replace(/\/$/, '');
     return s.length > 42 ? s.slice(0, 40) + '…' : s;
-  }
-
-  function faviconFor(url) {
-    return 'https://www.google.com/s2/favicons?domain=' + encodeURIComponent(hostOf(url)) + '&sz=128';
   }
 
   function getById(id) {
@@ -129,6 +142,30 @@
     } catch (e) {
       toast('Gagal simpan — storan penuh. Cuba gambar yang lebih kecil.');
       return false;
+    }
+  }
+
+  /* ---------- Seed data (sekali sahaja) ---------- */
+
+  function seedIfNeeded() {
+    try {
+      if (localStorage.getItem(SEED_FLAG_KEY)) return;
+
+      var existingUrls = {};
+      projects.forEach(function (p) { existingUrls[p.url] = true; });
+
+      var added = false;
+      SEED_PROJECTS.forEach(function (s) {
+        if (!existingUrls[s.url]) {
+          projects.push({ id: uid(), name: s.name, url: s.url, image: '', date: s.date });
+          added = true;
+        }
+      });
+
+      if (added) persist();
+      localStorage.setItem(SEED_FLAG_KEY, '1');
+    } catch (e) {
+      /* storan tak tersedia — jangan halang aplikasi jalan */
     }
   }
 
@@ -199,13 +236,13 @@
   function mediaHtml(p, tone) {
     if (p.image) {
       return '<div class="card-media" data-tone="' + tone + '">' +
-        '<img class="card-img" data-stage="custom" src="' + escapeHtml(p.image) + '" ' +
+        '<img class="card-img" src="' + escapeHtml(p.image) + '" ' +
         'alt="Gambar ' + escapeHtml(p.name) + '" loading="lazy">' +
         '</div>';
     }
+    var first = (p.name || '?').trim().charAt(0).toUpperCase() || '?';
     return '<div class="card-media" data-tone="' + tone + '">' +
-      '<img class="card-favicon" data-stage="favicon" src="' + escapeHtml(faviconFor(p.url)) + '" ' +
-      'alt="Ikon ' + escapeHtml(p.name) + '" loading="lazy">' +
+      '<div class="card-letter">' + escapeHtml(first) + '</div>' +
       '</div>';
   }
 
@@ -255,7 +292,7 @@
   }
 
   function attachImageFallbacks() {
-    var imgs = els.grid.querySelectorAll('img[data-stage]');
+    var imgs = els.grid.querySelectorAll('.card-img');
     Array.prototype.forEach.call(imgs, function (img) {
       img.addEventListener('error', function () {
         var card = img.closest('.card');
@@ -263,18 +300,12 @@
         var media = img.parentElement;
         if (!p || !media) return;
 
-        if (img.dataset.stage === 'custom') {
-          img.dataset.stage = 'favicon';
-          img.className = 'card-favicon';
-          img.src = faviconFor(p.url);
-        } else {
-          var letter = document.createElement('div');
-          letter.className = 'card-letter';
-          var first = (p.name || '?').trim().charAt(0).toUpperCase();
-          letter.textContent = first || '?';
-          media.textContent = '';
-          media.appendChild(letter);
-        }
+        var letter = document.createElement('div');
+        letter.className = 'card-letter';
+        var first = (p.name || '?').trim().charAt(0).toUpperCase();
+        letter.textContent = first || '?';
+        media.textContent = '';
+        media.appendChild(letter);
       });
     });
   }
@@ -459,5 +490,6 @@
 
   els.year.textContent = new Date().getFullYear();
   els.dateInput.value = todayISO();
+  seedIfNeeded();
   render();
 })();
