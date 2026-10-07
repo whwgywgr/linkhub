@@ -8,6 +8,7 @@
 
   var STORAGE_KEY = 'linkhub.projects.v1';
   var SEED_FLAG_KEY = 'linkhub.seeds.v1';
+  var VIEW_KEY = 'linkhub.view.v1';
 
   // Seed data: semua project web dengan link yang hidup.
   // Dimuatkan sekali sahaja pada first visit — selepas itu data pengguna
@@ -40,6 +41,8 @@
     count: document.getElementById('projectCount'),
     search: document.getElementById('searchInput'),
     sort: document.getElementById('sortSelect'),
+    viewGridBtn: document.getElementById('viewGridBtn'),
+    viewListBtn: document.getElementById('viewListBtn'),
     addBtn: document.getElementById('addBtn'),
 
     overlay: document.getElementById('modalOverlay'),
@@ -310,6 +313,26 @@
     });
   }
 
+  /* ---------- Mod paparan (grid / senarai) ---------- */
+
+  function getView() {
+    try {
+      return localStorage.getItem(VIEW_KEY) === 'list' ? 'list' : 'grid';
+    } catch (e) {
+      return 'grid';
+    }
+  }
+
+  function applyView(mode) {
+    var isList = mode === 'list';
+    els.grid.classList.toggle('list-mode', isList);
+    els.viewGridBtn.classList.toggle('active', !isList);
+    els.viewListBtn.classList.toggle('active', isList);
+    els.viewGridBtn.setAttribute('aria-pressed', String(!isList));
+    els.viewListBtn.setAttribute('aria-pressed', String(isList));
+    try { localStorage.setItem(VIEW_KEY, mode); } catch (e) { /* biarkan sahaja */ }
+  }
+
   /* ---------- Modal tambah / edit ---------- */
 
   function openModal(p) {
@@ -477,6 +500,9 @@
   els.search.addEventListener('input', render);
   els.sort.addEventListener('change', render);
 
+  els.viewGridBtn.addEventListener('click', function () { applyView('grid'); });
+  els.viewListBtn.addEventListener('click', function () { applyView('list'); });
+
   els.confirmYes.addEventListener('click', confirmDelete);
   els.confirmNo.addEventListener('click', closeConfirm);
 
@@ -491,5 +517,6 @@
   els.year.textContent = new Date().getFullYear();
   els.dateInput.value = todayISO();
   seedIfNeeded();
+  applyView(getView());
   render();
 })();

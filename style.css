@@ -207,6 +207,73 @@ img { max-width: 100%; }
 
 .select { width: auto; cursor: pointer; }
 
+/* ---------- Suis paparan (grid / senarai) ---------- */
+
+.view-toggle { display: inline-flex; }
+
+.view-btn {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: var(--ink);
+  background: var(--surface);
+  border: var(--border-w) solid var(--ink);
+  padding: 9px 14px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.view-btn + .view-btn { border-left: 0; }
+
+.view-btn:hover { background: var(--bg); }
+
+.view-btn.active { background: var(--accent); }
+
+.view-btn:focus-visible { outline: 3px solid var(--accent-3); outline-offset: 2px; z-index: 1; }
+
+/* ---------- Mod senarai (kad sama, susun sebagai baris) ---------- */
+
+.grid.list-mode { grid-template-columns: 1fr; gap: 14px; }
+
+.grid.list-mode .card { flex-direction: row; align-items: stretch; }
+
+.grid.list-mode .card-media {
+  width: 132px;
+  min-height: 92px;
+  aspect-ratio: auto;
+  flex-shrink: 0;
+  border-bottom: 0;
+  border-right: var(--border-w) solid var(--ink);
+}
+
+.grid.list-mode .card-img { height: 100%; }
+
+.grid.list-mode .card-letter { font-size: 2.2rem; text-shadow: 3px 3px 0 var(--surface); }
+
+.grid.list-mode .card-body {
+  flex-direction: row;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  padding: 12px 16px;
+}
+
+.grid.list-mode .chip { align-self: center; }
+
+.grid.list-mode .card-name { font-size: 0.98rem; }
+
+.grid.list-mode .card-url { flex: 1 1 140px; }
+
+.grid.list-mode .card-actions { margin-top: 0; padding-top: 0; }
+
+@media (max-width: 520px) {
+  .grid.list-mode .card-media { width: 76px; min-height: 68px; }
+  .grid.list-mode .card-letter { font-size: 1.5rem; }
+  .grid.list-mode .card-url { display: none; }
+}
+
 /* ---------- Input ---------- */
 
 .input {

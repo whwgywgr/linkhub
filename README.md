@@ -11,6 +11,7 @@ Website mudah untuk simpan link-link web project anda di satu tempat — klik je
 - ⚡ **Satu klik terus buka** — klik mana-mana bahagian kad
 - ✏️ **Edit & buang** project
 - 🔎 **Carian** + susunan (terbaru / terlama / nama A–Z)
+- 🔲 **Mod paparan grid / senarai** — pilihan disimpan dalam localStorage
 - 💾 Data disimpan dalam **localStorage** browser (tiada server diperlukan)
 - 🌱 **Seed data** — senarai project sedia ada dimuatkan sekali sahaja pada kunjungan pertama; selepas itu data anda sendiri yang digunakan
 - 🎨 Theme **Neo-Brutalism** — struktur CSS variables, senang tambah theme baru kelak
