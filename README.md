@@ -40,6 +40,7 @@ Suis theme ada dalam header — pilihan disimpan dalam localStorage. Semua warna
 ```css
 [data-theme="neo-brutalism"] { --bg: ...; --ink: ...; --accent: ...; }
 [data-theme="papercut"]      { --bg: ...; --ink: ...; --accent: ...; }
+[data-theme="facebook"]      { --bg: ...; --ink: ...; --accent: ...; }
 ```
 
 Untuk theme baru: tambah blok `[data-theme="nama-theme"]` dengan nilai variables yang lain, tambah `<option>` baharu dalam `#themeSelect` (`index.html`) — siap.

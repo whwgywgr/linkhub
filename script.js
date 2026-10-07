@@ -338,10 +338,12 @@
 
   /* ---------- Theme ---------- */
 
+  var THEMES = ['neo-brutalism', 'papercut', 'facebook'];
+
   function getTheme() {
     try {
       var t = localStorage.getItem(THEME_KEY);
-      return t === 'papercut' ? 'papercut' : 'neo-brutalism';
+      return THEMES.indexOf(t) !== -1 ? t : 'neo-brutalism';
     } catch (e) {
       return 'neo-brutalism';
     }

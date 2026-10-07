@@ -26,6 +26,10 @@
   --focus-shadow: 4px 4px 0 var(--accent-3);
   --card-tilt: 0deg;
   --radius: 0;
+  --primary-ink: #141414;   /* teks atas permukaan aksen */
+  --chip-border-w: 2px;
+  --marquee-bg: #141414;
+  --marquee-ink: #F6F1E7;
 
   --font-display: "Archivo Black", "Arial Black", sans-serif;
   --font-body: "Space Grotesk", "Segoe UI", sans-serif;
@@ -56,8 +60,45 @@
   --focus-shadow: 0 0 0 3px rgba(143, 184, 222, 0.55);
   --card-tilt: -0.4deg;
   --radius: 10px;
+  --primary-ink: #4A443C;
+  --chip-border-w: 2px;
+  --marquee-bg: #4A443C;
+  --marquee-ink: #FBF7F1;
 
   --font-display: "Fraunces", Georgia, serif;
+}
+
+/* FACEBOOK — biru FB, latar kelabu, kad putih tanpa border,
+   sudut bulat 8px, font sistem seperti UI Facebook sebenar. */
+
+[data-theme="facebook"] {
+  --bg: #F0F2F5;
+  --grid-line: rgba(0, 0, 0, 0);
+  --ink: #050505;
+  --surface: #FFFFFF;
+  --muted: #65676B;
+  --accent: #1877F2;      /* Facebook blue */
+  --accent-2: #E41E3F;    /* merah notifikasi */
+  --accent-3: #45BD62;    /* hijau FB */
+  --accent-4: #A033FF;    /* ungu Messenger */
+  --accent-5: #050505;    /* hitam FB */
+  --danger-ink: #FFFFFF;
+
+  --border-w: 0px;
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.1);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.12);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.16);
+  --shadow-accent: 0 4px 10px rgba(24, 119, 242, 0.35);
+  --letter-shadow: none;
+  --focus-shadow: 0 0 0 3px rgba(24, 119, 242, 0.45);
+  --card-tilt: 0deg;
+  --radius: 8px;
+  --primary-ink: #FFFFFF;
+  --chip-border-w: 0px;
+  --marquee-bg: #1877F2;
+  --marquee-ink: #FFFFFF;
+
+  --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
 
 /* ---------- Reset & asas ---------- */
@@ -101,8 +142,8 @@ img { max-width: 100%; }
 /* ---------- Marquee ---------- */
 
 .marquee {
-  background: var(--ink);
-  color: var(--bg);
+  background: var(--marquee-bg);
+  color: var(--marquee-ink);
   overflow: hidden;
   border-bottom: var(--border-w) solid var(--ink);
   font-family: var(--font-display);
@@ -145,7 +186,7 @@ img { max-width: 100%; }
 
 .brand-box {
   background: var(--accent);
-  color: var(--ink);
+  color: var(--primary-ink);
   border: var(--border-w) solid var(--ink);
   box-shadow: var(--shadow-md);
   padding: 0.08em 0.22em;
@@ -179,6 +220,7 @@ img { max-width: 100%; }
   box-shadow: var(--shadow-sm);
   padding: 8px 14px;
   font-family: var(--font-display);
+  font-weight: 700;
   font-size: 0.8rem;
   letter-spacing: 0.08em;
   white-space: nowrap;
@@ -212,11 +254,11 @@ img { max-width: 100%; }
 .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
 .btn:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
 
-.btn-primary { background: var(--accent); }
+.btn-primary { background: var(--accent); color: var(--primary-ink); }
 .btn-danger { background: var(--accent-2); color: var(--danger-ink); }
 .btn-lg { font-size: 1rem; padding: 12px 22px; }
-.btn-small { font-size: 0.75rem; padding: 6px 10px; box-shadow: 3px 3px 0 var(--ink); }
-.btn-small:hover { box-shadow: 4px 4px 0 var(--ink); }
+.btn-small { font-size: 0.75rem; padding: 6px 10px; box-shadow: var(--shadow-sm); }
+.btn-small:hover { box-shadow: var(--shadow-md); }
 .btn-icon { padding: 8px 11px; font-size: 0.85rem; }
 
 /* ---------- Toolbar ---------- */
@@ -269,7 +311,7 @@ img { max-width: 100%; }
 
 .view-btn:hover { background: var(--bg); }
 
-.view-btn.active { background: var(--accent); }
+.view-btn.active { background: var(--accent); color: var(--primary-ink); }
 
 .view-btn:focus-visible { outline: 3px solid var(--accent-3); outline-offset: 2px; z-index: 1; }
 
@@ -344,7 +386,7 @@ img { max-width: 100%; }
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.04em;
-  color: var(--ink);
+  color: var(--primary-ink);
   background: var(--accent-4);
   border: var(--border-w) solid var(--ink);
   box-shadow: var(--shadow-sm);
@@ -417,8 +459,9 @@ img { max-width: 100%; }
 
 .card-letter {
   font-family: var(--font-display);
+  font-weight: 700;
   font-size: 4rem;
-  color: var(--ink);
+  color: var(--primary-ink);
   text-shadow: var(--letter-shadow);
 }
 
@@ -436,10 +479,11 @@ img { max-width: 100%; }
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
-  border: 2px solid var(--ink);
+  border: var(--chip-border-w) solid var(--ink);
   box-shadow: var(--shadow-sm);
   padding: 3px 9px;
   background: var(--surface);
+  color: var(--primary-ink);
   border-radius: var(--radius);
 }
 
@@ -563,6 +607,7 @@ img { max-width: 100%; }
   font-family: var(--font-display);
   font-size: 1.35rem;
   background: var(--accent);
+  color: var(--primary-ink);
   border: var(--border-w) solid var(--ink);
   box-shadow: var(--shadow-sm);
   padding: 6px 14px;
