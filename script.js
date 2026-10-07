@@ -48,6 +48,7 @@
     themeSelect: document.getElementById('themeSelect'),
     themeLabel: document.getElementById('themeLabel'),
     catInput: document.getElementById('catInput'),
+    creditInput: document.getElementById('creditInput'),
     categoryList: document.getElementById('categoryList'),
     filterGroup: document.getElementById('filterGroup'),
     addBtn: document.getElementById('addBtn'),
@@ -247,7 +248,7 @@
     var list = projects.filter(function (p) {
       if (activeFilter !== 'all' && (p.category || 'Project').toLowerCase() !== activeFilter) return false;
       if (!q) return true;
-      return (p.name + ' ' + p.url).toLowerCase().indexOf(q) !== -1;
+      return (p.name + ' ' + p.url + ' ' + (p.credit || '')).toLowerCase().indexOf(q) !== -1;
     });
 
     var mode = els.sort.value;
@@ -306,6 +307,7 @@
       '</div>' +
       '<h3 class="card-name">' + escapeHtml(p.name) + '</h3>' +
       '<p class="card-url" title="' + escapeHtml(p.url) + '">' + escapeHtml(shortUrl(p.url)) + '</p>' +
+      (p.credit ? '<p class="card-credit">Kredit: <em>' + escapeHtml(p.credit) + '</em></p>' : '') +
       '<div class="card-actions">' +
       '<a class="btn btn-primary btn-small btn-open" data-action="open" href="' + escapeHtml(p.url) + '" ' +
       'target="_blank" rel="noopener noreferrer">Buka ↗</a>' +
@@ -469,6 +471,7 @@
     els.nameInput.value = p ? p.name : '';
     els.urlInput.value = p ? p.url : '';
     els.catInput.value = p && p.category ? p.category : 'Project';
+    els.creditInput.value = p && p.credit ? p.credit : '';
     els.dateInput.value = p && p.date ? p.date : todayISO();
 
     // cadangan kategori: yang sedia ada dalam senarai
@@ -516,13 +519,14 @@
     if (!category) category = 'Project';
     else if (category.toLowerCase() === 'project') category = 'Project';
     else if (category.toLowerCase() === 'link') category = 'Link';
+    var credit = (els.creditInput.value || '').trim().slice(0, 60);
     var date = els.dateInput.value;
 
     if (!name) { showFormError('Nama project wajib diisi.'); els.nameInput.focus(); return; }
     if (!url) { showFormError('Link tak sah. Contoh: https://example.com'); els.urlInput.focus(); return; }
     if (!date) { showFormError('Tarikh dibuat wajib diisi.'); els.dateInput.focus(); return; }
 
-    var project = { id: editingId || uid(), name: name, url: url, category: category, image: currentImage, date: date };
+    var project = { id: editingId || uid(), name: name, url: url, category: category, credit: credit, image: currentImage, date: date };
 
     if (editingId) {
       for (var i = 0; i < projects.length; i++) {

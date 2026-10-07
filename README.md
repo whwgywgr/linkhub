@@ -6,7 +6,7 @@ Website mudah untuk simpan link-link web project anda di satu tempat — klik je
 
 ## Ciri-ciri
 
-- ➕ **Tambah project** — nama, link, kategori, gambar & tarikh dibuat
+- ➕ **Tambah project** — nama, link, kategori, kredit, gambar & tarikh dibuat
 - 🏷️ **Kategori custom** — taip mana-mana nama kategori (cth: Project, Link, Kerja, Belajar); bar tapisan bina butang + bilangan secara dinamik, warna chip ikut kategori
 - 🖼️ **Gambar** — masukkan URL gambar atau upload fail (auto-resize & mampat); kalau takda gambar, kad papar huruf pertama nama project atas latar warna
 - ⚡ **Satu klik terus buka** — klik mana-mana bahagian kad
