@@ -189,7 +189,12 @@
 
 [hidden] { display: none !important; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  /* Fluid UI scaling: saiz asas teks mengalir mengikut lebar skrin
+     (±14px pada telefon → 17px desktop) — semua saiz rem turut mengalir. */
+  font-size: clamp(14px, 0.75rem + 0.35vw, 17px);
+}
 
 body {
   font-family: var(--font-body);
@@ -218,7 +223,7 @@ img { max-width: 100%; }
   width: 100%;
   max-width: 1200px;
   margin-inline: auto;
-  padding-inline: 20px;
+  padding-inline: clamp(14px, 4vw, 20px);
 }
 
 /* ---------- Marquee ---------- */
@@ -229,7 +234,7 @@ img { max-width: 100%; }
   overflow: hidden;
   border-bottom: var(--border-w) solid var(--ink);
   font-family: var(--font-display);
-  font-size: 0.8rem;
+  font-size: clamp(0.62rem, 0.5rem + 0.5vw, 0.8rem);
   letter-spacing: 0.12em;
   user-select: none;
 }
@@ -255,7 +260,7 @@ img { max-width: 100%; }
   justify-content: space-between;
   flex-wrap: wrap;
   gap: 22px;
-  padding-block: 40px 28px;
+  padding-block: clamp(26px, 5vw, 40px) clamp(18px, 4vw, 28px);
 }
 
 .brand-title {
@@ -350,7 +355,7 @@ img { max-width: 100%; }
   gap: 14px;
   align-items: center;
   flex-wrap: wrap;
-  margin-bottom: 30px;
+  margin-bottom: clamp(22px, 4vw, 30px);
 }
 
 .search { flex: 1 1 240px; }
@@ -452,6 +457,8 @@ img { max-width: 100%; }
 .input {
   width: 100%;
   font: inherit;
+  /* min 16px: halang iOS Safari auto-zoom bila input difokus */
+  font-size: max(16px, 1rem);
   font-weight: 500;
   color: var(--ink);
   background: var(--surface);
@@ -495,8 +502,8 @@ img { max-width: 100%; }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-  gap: 28px;
+  grid-template-columns: repeat(auto-fill, minmax(min(270px, 100%), 1fr));
+  gap: clamp(18px, 3vw, 28px);
   padding-bottom: 60px;
 }
 
@@ -730,7 +737,7 @@ img { max-width: 100%; }
   background: var(--surface);
   border: var(--border-w) solid var(--ink);
   box-shadow: var(--shadow-lg);
-  padding: 24px;
+  padding: clamp(16px, 4vw, 24px);
   border-radius: var(--radius);
   animation: pop-in 0.16s ease-out;
   max-height: calc(100vh - 40px);
@@ -850,6 +857,15 @@ img { max-width: 100%; }
   .header-actions .btn-lg { flex: 1; }
   .modal-actions { flex-direction: column-reverse; }
   .modal-actions .btn { width: 100%; }
+}
+
+/* Sasaran sentuh selesa pada telefon kecil */
+@media (max-width: 480px) {
+  .btn { padding-block: 12px; }
+  .btn-small { padding-block: 8px; }
+  .view-btn,
+  .filter-btn { padding: 11px 14px; }
+  .site-footer { padding-bottom: env(safe-area-inset-bottom); }
 }
 
 @media (prefers-reduced-motion: reduce) {
