@@ -33,15 +33,16 @@ python -m http.server 8080
 4. Framework Preset: **Other** — biarkan semua default (tiada build command, output = root)
 5. Klik **Deploy** — siap!
 
-## Tambah theme baru
+## Tukar & tambah theme
 
-Semua warna & shadow ditakrifkan sebagai CSS variables dalam `style.css`:
+Suis theme ada dalam header — pilihan disimpan dalam localStorage. Semua warna & shadow ditakrifkan sebagai CSS variables dalam `style.css`:
 
 ```css
 [data-theme="neo-brutalism"] { --bg: ...; --ink: ...; --accent: ...; }
+[data-theme="papercut"]      { --bg: ...; --ink: ...; --accent: ...; }
 ```
 
-Untuk theme baru, tambah blok `[data-theme="nama-theme"]` dengan nilai variables yang lain, kemudian tukar atribut `data-theme` pada tag `<html>` dalam `index.html`.
+Untuk theme baru: tambah blok `[data-theme="nama-theme"]` dengan nilai variables yang lain, tambah `<option>` baharu dalam `#themeSelect` (`index.html`) — siap.
 
 ## Struktur fail
 

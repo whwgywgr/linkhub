@@ -9,6 +9,7 @@
   var STORAGE_KEY = 'linkhub.projects.v1';
   var SEED_FLAG_KEY = 'linkhub.seeds.v1';
   var VIEW_KEY = 'linkhub.view.v1';
+  var THEME_KEY = 'linkhub.theme.v1';
 
   // Seed data: semua project web dengan link yang hidup.
   // Dimuatkan sekali sahaja pada first visit — selepas itu data pengguna
@@ -43,6 +44,8 @@
     sort: document.getElementById('sortSelect'),
     viewGridBtn: document.getElementById('viewGridBtn'),
     viewListBtn: document.getElementById('viewListBtn'),
+    themeSelect: document.getElementById('themeSelect'),
+    themeLabel: document.getElementById('themeLabel'),
     addBtn: document.getElementById('addBtn'),
 
     overlay: document.getElementById('modalOverlay'),
@@ -333,6 +336,24 @@
     try { localStorage.setItem(VIEW_KEY, mode); } catch (e) { /* biarkan sahaja */ }
   }
 
+  /* ---------- Theme ---------- */
+
+  function getTheme() {
+    try {
+      var t = localStorage.getItem(THEME_KEY);
+      return t === 'papercut' ? 'papercut' : 'neo-brutalism';
+    } catch (e) {
+      return 'neo-brutalism';
+    }
+  }
+
+  function applyTheme(name) {
+    document.documentElement.setAttribute('data-theme', name);
+    els.themeSelect.value = name;
+    els.themeLabel.textContent = name.replace('-', ' ').toUpperCase();
+    try { localStorage.setItem(THEME_KEY, name); } catch (e) { /* biarkan sahaja */ }
+  }
+
   /* ---------- Modal tambah / edit ---------- */
 
   function openModal(p) {
@@ -503,6 +524,10 @@
   els.viewGridBtn.addEventListener('click', function () { applyView('grid'); });
   els.viewListBtn.addEventListener('click', function () { applyView('list'); });
 
+  els.themeSelect.addEventListener('change', function () {
+    applyTheme(els.themeSelect.value);
+  });
+
   els.confirmYes.addEventListener('click', confirmDelete);
   els.confirmNo.addEventListener('click', closeConfirm);
 
@@ -518,5 +543,6 @@
   els.dateInput.value = todayISO();
   seedIfNeeded();
   applyView(getView());
+  applyTheme(getTheme());
   render();
 })();

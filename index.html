@@ -8,7 +8,7 @@
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%F0%9F%94%97%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Fraunces:wght@600;700&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -28,6 +28,13 @@
       <p class="brand-sub">Simpan link project anda di satu tempat — klik je, terus buka.</p>
     </div>
     <div class="header-actions">
+      <label class="sort-wrap">
+        <span class="sort-label">Theme:</span>
+        <select id="themeSelect" class="input select">
+          <option value="neo-brutalism">Neo-Brutalism</option>
+          <option value="papercut">Papercut</option>
+        </select>
+      </label>
       <span class="stat-badge"><strong id="projectCount">0</strong>&nbsp;PROJECT</span>
       <button id="addBtn" class="btn btn-primary btn-lg" type="button">+ Tambah Project</button>
     </div>
@@ -65,7 +72,7 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <span>LINKHUB © <span id="year"></span></span>
-      <span>Theme: <strong>NEO-BRUTALISM</strong></span>
+      <span>Theme: <strong id="themeLabel">NEO-BRUTALISM</strong></span>
     </div>
   </footer>
 

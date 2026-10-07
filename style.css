@@ -1,5 +1,5 @@
 /* ==========================================================================
-   LINKHUB — Theme: NEO-BRUTALISM
+   LINKHUB — Themes: NEO-BRUTALISM | PAPERCUT
    Semua warna/border/shadow guna CSS variables di bawah.
    Theme baru kelak: tambah blok [data-theme="nama-theme"] sahaja.
    ========================================================================== */
@@ -21,10 +21,43 @@
   --shadow-sm: 4px 4px 0 var(--ink);
   --shadow-md: 6px 6px 0 var(--ink);
   --shadow-lg: 10px 10px 0 var(--ink);
+  --shadow-accent: 6px 6px 0 var(--accent-2);
+  --letter-shadow: 4px 4px 0 var(--surface);
+  --focus-shadow: 4px 4px 0 var(--accent-3);
+  --card-tilt: 0deg;
   --radius: 0;
 
   --font-display: "Archivo Black", "Arial Black", sans-serif;
   --font-body: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+/* PAPERCUT — estetika kertas: bayang lembut, pastel, sudut membulat,
+   kad condong sikit macam tindanan kertas terpotong. */
+
+[data-theme="papercut"] {
+  --bg: #FBF7F1;
+  --grid-line: rgba(74, 68, 60, 0.05);
+  --ink: #4A443C;
+  --surface: #FFFFFF;
+  --muted: #8D8578;
+  --accent: #E9C46A;      /* mustard washi */
+  --accent-2: #E76F51;    /* terracotta */
+  --accent-3: #8FB8DE;    /* biru debu */
+  --accent-4: #A3C293;    /* sage */
+  --accent-5: #C9A7EB;    /* mauve */
+  --danger-ink: #FFFFFF;
+
+  --border-w: 1px;
+  --shadow-sm: 0 2px 5px rgba(74, 68, 60, 0.12);
+  --shadow-md: 0 4px 10px rgba(74, 68, 60, 0.13);
+  --shadow-lg: 0 10px 22px rgba(74, 68, 60, 0.16);
+  --shadow-accent: 0 4px 10px rgba(231, 111, 81, 0.35);
+  --letter-shadow: 0 3px 6px rgba(74, 68, 60, 0.22);
+  --focus-shadow: 0 0 0 3px rgba(143, 184, 222, 0.55);
+  --card-tilt: -0.4deg;
+  --radius: 10px;
+
+  --font-display: "Fraunces", Georgia, serif;
 }
 
 /* ---------- Reset & asas ---------- */
@@ -117,12 +150,13 @@ img { max-width: 100%; }
   box-shadow: var(--shadow-md);
   padding: 0.08em 0.22em;
   display: inline-block;
+  border-radius: var(--radius);
 }
 
 .brand-box-invert {
   background: var(--ink);
   color: var(--accent);
-  box-shadow: 6px 6px 0 var(--accent-2);
+  box-shadow: var(--shadow-accent);
 }
 
 .brand-sub {
@@ -148,6 +182,7 @@ img { max-width: 100%; }
   font-size: 0.8rem;
   letter-spacing: 0.08em;
   white-space: nowrap;
+  border-radius: var(--radius);
 }
 
 /* ---------- Butang ---------- */
@@ -170,6 +205,7 @@ img { max-width: 100%; }
   cursor: pointer;
   text-decoration: none;
   white-space: nowrap;
+  border-radius: var(--radius);
   transition: transform 0.1s ease, box-shadow 0.1s ease, background 0.1s ease;
 }
 
@@ -209,7 +245,11 @@ img { max-width: 100%; }
 
 /* ---------- Suis paparan (grid / senarai) ---------- */
 
-.view-toggle { display: inline-flex; }
+.view-toggle {
+  display: inline-flex;
+  border-radius: var(--radius);
+  overflow: hidden;
+}
 
 .view-btn {
   font-family: var(--font-body);
@@ -250,7 +290,7 @@ img { max-width: 100%; }
 
 .grid.list-mode .card-img { height: 100%; }
 
-.grid.list-mode .card-letter { font-size: 2.2rem; text-shadow: 3px 3px 0 var(--surface); }
+.grid.list-mode .card-letter { font-size: 2.2rem; }
 
 .grid.list-mode .card-body {
   flex-direction: row;
@@ -291,7 +331,7 @@ img { max-width: 100%; }
 .input:focus {
   outline: none;
   transform: translate(-2px, -2px);
-  box-shadow: 4px 4px 0 var(--accent-3);
+  box-shadow: var(--focus-shadow);
 }
 
 .input::placeholder { color: var(--muted); opacity: 0.75; }
@@ -307,15 +347,16 @@ img { max-width: 100%; }
   color: var(--ink);
   background: var(--accent-4);
   border: var(--border-w) solid var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: var(--shadow-sm);
   padding: 7px 12px;
   margin-right: 12px;
   cursor: pointer;
+  border-radius: var(--radius);
   transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
-.input-file::file-selector-button:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); }
-.input-file::file-selector-button:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
+.input-file::file-selector-button:hover { transform: translate(-1px, -1px); box-shadow: var(--shadow-md); }
+.input-file::file-selector-button:active { transform: translate(2px, 2px); box-shadow: none; }
 
 /* ---------- Grid & kad ---------- */
 
@@ -333,16 +374,19 @@ img { max-width: 100%; }
   border: var(--border-w) solid var(--ink);
   box-shadow: var(--shadow-md);
   cursor: pointer;
+  border-radius: var(--radius);
+  overflow: hidden;
+  transform: rotate(var(--card-tilt));
   transition: transform 0.12s ease, box-shadow 0.12s ease;
 }
 
 .card:hover,
 .card:focus-visible {
-  transform: translate(-3px, -3px);
+  transform: translate(-3px, -3px) rotate(var(--card-tilt));
   box-shadow: var(--shadow-lg);
 }
 
-.card:active { transform: translate(1px, 1px); box-shadow: var(--shadow-sm); }
+.card:active { transform: translate(2px, 2px) rotate(var(--card-tilt)); box-shadow: var(--shadow-sm); }
 
 .card-media {
   border-bottom: var(--border-w) solid var(--ink);
@@ -375,7 +419,7 @@ img { max-width: 100%; }
   font-family: var(--font-display);
   font-size: 4rem;
   color: var(--ink);
-  text-shadow: 4px 4px 0 var(--surface);
+  text-shadow: var(--letter-shadow);
 }
 
 .card-body {
@@ -393,9 +437,10 @@ img { max-width: 100%; }
   letter-spacing: 0.09em;
   text-transform: uppercase;
   border: 2px solid var(--ink);
-  box-shadow: 3px 3px 0 var(--ink);
+  box-shadow: var(--shadow-sm);
   padding: 3px 9px;
   background: var(--surface);
+  border-radius: var(--radius);
 }
 
 .chip[data-tone="1"] { background: var(--accent); }
@@ -443,6 +488,7 @@ img { max-width: 100%; }
   flex-direction: column;
   align-items: center;
   gap: 14px;
+  border-radius: var(--radius);
 }
 
 .empty-emoji { font-size: 3rem; }
@@ -492,6 +538,7 @@ img { max-width: 100%; }
   border: var(--border-w) solid var(--ink);
   box-shadow: var(--shadow-lg);
   padding: 24px;
+  border-radius: var(--radius);
   animation: pop-in 0.16s ease-out;
   max-height: calc(100vh - 40px);
   overflow-y: auto;
@@ -520,6 +567,7 @@ img { max-width: 100%; }
   box-shadow: var(--shadow-sm);
   padding: 6px 14px;
   display: inline-block;
+  border-radius: var(--radius);
 }
 
 .field { margin-bottom: 16px; }
@@ -550,6 +598,7 @@ img { max-width: 100%; }
   border: var(--border-w) solid var(--ink);
   box-shadow: var(--shadow-sm);
   background: var(--bg);
+  border-radius: var(--radius);
 }
 
 .form-error {
@@ -561,6 +610,7 @@ img { max-width: 100%; }
   padding: 9px 12px;
   margin-bottom: 16px;
   box-shadow: var(--shadow-sm);
+  border-radius: var(--radius);
 }
 
 .modal-actions {
@@ -583,10 +633,11 @@ img { max-width: 100%; }
   background: var(--ink);
   color: var(--bg);
   border: var(--border-w) solid var(--ink);
-  box-shadow: 6px 6px 0 var(--accent-2);
+  box-shadow: var(--shadow-accent);
   padding: 12px 20px;
   font-weight: 700;
   font-size: 0.9rem;
+  border-radius: var(--radius);
   animation: toast-in 0.18s ease-out;
   max-width: min(92vw, 480px);
   text-align: center;
