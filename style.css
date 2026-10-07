@@ -372,6 +372,7 @@ img { max-width: 100%; }
 .view-toggle,
 .filter-group {
   display: inline-flex;
+  border: var(--border-w) solid var(--ink);
   border-radius: var(--radius);
   overflow: hidden;
 }
@@ -385,14 +386,15 @@ img { max-width: 100%; }
   letter-spacing: 0.04em;
   color: var(--ink);
   background: var(--surface);
-  border: var(--border-w) solid var(--ink);
+  border: 0;
+  border-left: var(--border-w) solid var(--ink);
   padding: 9px 14px;
   cursor: pointer;
   white-space: nowrap;
 }
 
-.view-btn + .view-btn,
-.filter-btn + .filter-btn { border-left: 0; }
+.view-btn:first-child,
+.filter-btn:first-child { border-left: 0; }
 
 .view-btn:hover,
 .filter-btn:hover { background: var(--bg); }
