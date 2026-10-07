@@ -30,6 +30,9 @@
   --chip-border-w: 2px;
   --marquee-bg: #141414;
   --marquee-ink: #F6F1E7;
+  --invert-bg: #141414;
+  --invert-ink: #FFD43B;
+  --selection-ink: #FFD43B;
 
   --font-display: "Archivo Black", "Arial Black", sans-serif;
   --font-body: "Space Grotesk", "Segoe UI", sans-serif;
@@ -64,6 +67,9 @@
   --chip-border-w: 2px;
   --marquee-bg: #4A443C;
   --marquee-ink: #FBF7F1;
+  --invert-bg: #4A443C;
+  --invert-ink: #E9C46A;
+  --selection-ink: #E9C46A;
 
   --font-display: "Fraunces", Georgia, serif;
 }
@@ -97,6 +103,9 @@
   --chip-border-w: 0px;
   --marquee-bg: #1877F2;
   --marquee-ink: #FFFFFF;
+  --invert-bg: #050505;
+  --invert-ink: #1877F2;
+  --selection-ink: #1877F2;
 
   --font-display: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
 }
@@ -130,8 +139,48 @@
   --chip-border-w: 0px;
   --marquee-bg: #0A0C10;
   --marquee-ink: #58A6FF;
+  --invert-bg: #E6E9EF;
+  --invert-ink: #58A6FF;
+  --selection-ink: #58A6FF;
 
   --font-display: "Space Grotesk", "Segoe UI", sans-serif;
+}
+
+/* TERMINAL — hijau fosfor atas hitam, monospace, glow CRT dan scanlines.
+   Vibe console/hacker klasik. */
+
+[data-theme="terminal"] {
+  --bg: #0A0F0A;
+  --grid-line: rgba(51, 255, 51, 0.06);
+  --ink: #33FF33;
+  --surface: #0F1A0F;
+  --muted: #3E9C5C;
+  --accent: #33FF33;      /* hijau fosfor */
+  --accent-2: #FF5555;    /* merah CGA */
+  --accent-3: #55FFFF;    /* cyan CGA */
+  --accent-4: #FFFF55;    /* kuning CGA */
+  --accent-5: #FF55FF;    /* magenta CGA */
+  --danger-ink: #051405;
+
+  --border-w: 1px;
+  --shadow-sm: 0 0 6px rgba(51, 255, 51, 0.15);
+  --shadow-md: 0 0 12px rgba(51, 255, 51, 0.2);
+  --shadow-lg: 0 0 24px rgba(51, 255, 51, 0.3);
+  --shadow-accent: 0 0 12px rgba(51, 255, 51, 0.4);
+  --letter-shadow: none;
+  --focus-shadow: 0 0 0 3px rgba(51, 255, 51, 0.35);
+  --card-tilt: 0deg;
+  --radius: 0;
+  --primary-ink: #051405;
+  --chip-border-w: 1px;
+  --marquee-bg: #020502;
+  --marquee-ink: #33FF33;
+  --invert-bg: #020502;
+  --invert-ink: #33FF33;
+  --selection-ink: #051405;
+
+  --font-display: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
+  --font-body: "JetBrains Mono", "Cascadia Code", Consolas, monospace;
 }
 
 /* ---------- Reset & asas ---------- */
@@ -156,7 +205,7 @@ body {
   flex-direction: column;
 }
 
-::selection { background: var(--ink); color: var(--accent); }
+::selection { background: var(--ink); color: var(--selection-ink); }
 
 :focus-visible {
   outline: 3px solid var(--accent-3);
@@ -228,8 +277,8 @@ img { max-width: 100%; }
 }
 
 .brand-box-invert {
-  background: var(--ink);
-  color: var(--accent);
+  background: var(--invert-bg);
+  color: var(--invert-ink);
   box-shadow: var(--shadow-accent);
 }
 
@@ -741,4 +790,26 @@ img { max-width: 100%; }
     animation: none !important;
     transition: none !important;
   }
+}
+
+/* ---------- Extra: theme terminal (kesan CRT) ---------- */
+
+html[data-theme="terminal"] body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.12) 0px,
+    rgba(0, 0, 0, 0.12) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+}
+
+html[data-theme="terminal"] .brand-title,
+html[data-theme="terminal"] .card-name {
+  text-shadow: 0 0 6px rgba(51, 255, 51, 0.45);
 }
