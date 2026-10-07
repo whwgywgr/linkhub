@@ -429,7 +429,7 @@
 
   /* ---------- Theme ---------- */
 
-  var THEMES = ['neo-brutalism', 'papercut', 'facebook', 'dark-mode', 'terminal', 'skeuomorphism', 'flat-2'];
+  var THEMES = ['neo-brutalism', 'papercut', 'facebook', 'dark-mode', 'terminal', 'skeuomorphism', 'flat-2', 'claymorphism'];
 
   function systemTheme() {
     try {

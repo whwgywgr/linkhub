@@ -256,6 +256,43 @@
   --font-body: "Montserrat", "Segoe UI", sans-serif;
 }
 
+/* CLAYMORPHISM — rupa tanah liat yang mengembang: pastel lembut,
+   sudut sangat bulat dan double shadow (luar berwarna + inner highlight). */
+
+[data-theme="claymorphism"] {
+  --bg: #C7C9F4;
+  --grid-line: rgba(255, 255, 255, 0.3);
+  --ink: #46425E;
+  --surface: #FFFFFF;
+  --muted: #8B84A3;
+  --accent: #8B7CF6;      /* ungu clay */
+  --accent-2: #F473B9;    /* pink clay */
+  --accent-3: #4FC3B0;    /* mint clay */
+  --accent-4: #FFA94D;    /* peach clay */
+  --accent-5: #6C9BF2;    /* periwinkle clay */
+  --danger-ink: #FFFFFF;
+
+  --border-w: 0px;
+  --shadow-sm: 6px 6px 12px rgba(89, 76, 165, 0.28), inset -4px -4px 8px rgba(89, 76, 165, 0.18), inset 0 5px 10px rgba(255, 255, 255, 0.65);
+  --shadow-md: 10px 10px 20px rgba(89, 76, 165, 0.3), inset -6px -6px 12px rgba(89, 76, 165, 0.2), inset 0 8px 14px rgba(255, 255, 255, 0.7);
+  --shadow-lg: 16px 16px 32px rgba(89, 76, 165, 0.35), inset -8px -8px 16px rgba(89, 76, 165, 0.22), inset 0 10px 20px rgba(255, 255, 255, 0.7);
+  --shadow-accent: 10px 10px 20px rgba(89, 76, 165, 0.35), inset 0 6px 12px rgba(255, 255, 255, 0.5);
+  --letter-shadow: 0 3px 6px rgba(70, 66, 94, 0.35);
+  --focus-shadow: 0 0 0 3px rgba(139, 124, 246, 0.5);
+  --card-tilt: 0deg;
+  --radius: 22px;
+  --primary-ink: #FFFFFF;
+  --chip-border-w: 0px;
+  --marquee-bg: #8B7CF6;
+  --marquee-ink: #FFFFFF;
+  --invert-bg: #6C5CE0;
+  --invert-ink: #FFFFFF;
+  --selection-ink: #FFFFFF;
+
+  --font-display: "Baloo 2", "Segoe UI", sans-serif;
+  --font-body: "Nunito", "Segoe UI", sans-serif;
+}
+
 /* ---------- Reset & asas ---------- */
 
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -1111,4 +1148,10 @@ html[data-theme="skeuomorphism"] .card-media::after {
 html[data-theme="skeuomorphism"] .marquee {
   background: linear-gradient(180deg, #2E2822, #1B1712);
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+/* ---------- Extra: theme claymorphism (medan input puff) ---------- */
+
+html[data-theme="claymorphism"] .input {
+  box-shadow: inset 0 5px 10px rgba(255, 255, 255, 0.9), inset -4px -4px 8px rgba(89, 76, 165, 0.1), 0 4px 10px rgba(89, 76, 165, 0.18);
 }

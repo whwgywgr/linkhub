@@ -46,6 +46,7 @@ Suis theme ada dalam header — pilihan disimpan dalam localStorage. Semua warna
 [data-theme="terminal"]      { --bg: ...; --ink: ...; --accent: ...; }
 [data-theme="skeuomorphism"] { --bg: ...; --ink: ...; --accent: ...; }
 [data-theme="flat-2"]        { --bg: ...; --ink: ...; --accent: ...; }
+[data-theme="claymorphism"]  { --bg: ...; --ink: ...; --accent: ...; }
 ```
 
 Untuk theme baru: tambah blok `[data-theme="nama-theme"]` dengan nilai variables yang lain, tambah `<option>` baharu dalam `#themeSelect` (`index.html`) — siap.
